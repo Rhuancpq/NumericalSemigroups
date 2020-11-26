@@ -42,7 +42,8 @@ void findMinimalSet(set<int> *C){
                     break;
                 }
 
-                q.push(t);
+                if(!pre[t])
+                    q.push(t);
             }
             
             if(flag){
@@ -53,14 +54,19 @@ void findMinimalSet(set<int> *C){
         if(flag){
             auto r = x;
             r++;
+            cout << "Removido: " << *r << endl;
             C->erase(r);
         }
     }
 }
 
 int main(void) {
-    int v[] = {2, 4, 5, 7, 9, 14};
-    set<int> C(v, v+6);
+    set<int> C;
+    for (int i = 0; i < 100; i++){
+        int x;
+        cin >> x;
+        C.insert(x);
+    }
     findMinimalSet(&C);
     for(auto x : C)
         cout << x << " ";
