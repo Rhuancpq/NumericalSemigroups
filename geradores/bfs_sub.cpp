@@ -7,16 +7,15 @@
 
 using namespace std;
 
-void findMinimalSet(set<int> &C){
-    auto y = C.begin();
-    y++;
+void findMinimalSet(set<int> *C){
+    auto y = C->begin();
     unordered_map<int, bool> ht;
-    for(auto x : C){
+    for(auto x : *C){
         ht[x] = true;
     }
-    auto x = C.end;
-    x--
-    for(; x != y; x--){
+    auto x = C->end();
+    x--;
+    while(x != y){
         priority_queue<int> q;
         unordered_map<int, bool> pre;
         bool flag = false;
@@ -28,7 +27,7 @@ void findMinimalSet(set<int> &C){
                 continue;
             pre[v] = true;
             
-            for(auto i = C.begin(); *i < *x ; i++){
+            for(auto i = C->begin(); *i < *x ; i++){
                 int t = v-*i;
 
                 if(t < 0)
@@ -48,12 +47,23 @@ void findMinimalSet(set<int> &C){
             
             if(flag){
                 break;
-                C.erase(x);
             }
+        }
+        x--;
+        if(flag){
+            auto r = x;
+            r++;
+            C->erase(r);
         }
     }
 }
 
 int main(void) {
+    int v[] = {2, 4, 5, 7, 9, 14};
+    set<int> C(v, v+6);
+    findMinimalSet(&C);
+    for(auto x : C)
+        cout << x << " ";
+    cout << endl;
     return 0;
 }
