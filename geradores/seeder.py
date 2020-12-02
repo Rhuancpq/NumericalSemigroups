@@ -6,24 +6,60 @@ def list_gcd (v):
         return v[0]
     return gcd(v[0], list_gcd(v[1:len(v)]))
 
-v1 = []
-seed(100)
-for x in range(100):
-    v1.append(randint(2, 2**31-1))
+def generateCasetest(maxV, qtd, seedValue):
+    s = set()
+    seed(qtd*seedValue)
+    s.add(randint(2, qtd>>2))
+    while(len(s) != qtd):
+        s.add(randint(2, maxV))
 
-print(list_gcd(v1))
+    return list(s)
 
-f = open("caseTestBig", "w")
-for x in v1:
-    f.write("{}\n".format(x))
+def writeCaseTestInFile(filename, v):
+    f = open(filename, "w")
+    f.write("{}\n".format(len(v)))
+    for x in v:
+        f.write("{}\n".format(x))
 
-v2 = []
-seed(50)
-for x in range(100):
-    v2.append(randint(2, 2**15-1))
+vbig = generateCasetest(2**31-1, 100, 1)
+if(list_gcd(vbig) == 1):
+    writeCaseTestInFile("caseTestBig100", vbig)
 
-print(list_gcd(v2))
+vbig = generateCasetest(2**31-1, 500, 1)
+if(list_gcd(vbig) == 1):
+    writeCaseTestInFile("caseTestBig500", vbig)
 
-f = open("caseTestHalfBig", "w")
-for x in v2:
-    f.write("{}\n".format(x))
+vbig = generateCasetest(2**31-1, 1000, 1)
+#if(list_gcd(vbig) == 1):
+writeCaseTestInFile("caseTestBig1k", vbig)
+
+for x in range(1, 4):
+    vhalf = generateCasetest(2**20-1, 100, x)
+    if(list_gcd(vhalf) == 1):
+        writeCaseTestInFile("caseTest{}AlmostBig{}".format(x, 100), vhalf)
+
+for x in range(1, 4):
+    vhalf = generateCasetest(2**20-1, 500, x)
+    if(list_gcd(vhalf) == 1):
+        writeCaseTestInFile("caseTest{}AlmostBig500".format(x), vhalf)
+
+for x in range(1, 4):
+    vhalf = generateCasetest(2**20-1, 1000, x)
+    ## if(list_gcd(vhalf) == 1):
+    writeCaseTestInFile("caseTest{}AlmostBig1k".format(x), vhalf)
+
+vhalf = generateCasetest(2**15-1, 100, 1)
+if(list_gcd(vhalf) == 1):
+    writeCaseTestInFile("caseTestHalfBig100", vhalf)
+
+vhalf = generateCasetest(2**15-1, 500, 1)
+if(list_gcd(vhalf) == 1):
+    writeCaseTestInFile("caseTestHalfBig500", vhalf)
+
+vsmal = generateCasetest(2**10-1, 100, 1)
+if(list_gcd(vsmal) == 1):
+    writeCaseTestInFile("caseTestSmall100", vsmal)
+
+vsmal2 = generateCasetest(2**10-1, 500, 1)
+if(list_gcd(vsmal2) == 1):
+    writeCaseTestInFile("caseTestSmall500", vsmal2)

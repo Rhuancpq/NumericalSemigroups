@@ -2,17 +2,45 @@
 #include <vector>
 #include <set>
 #include <iostream>
+#include <algorithm>
 #include <unordered_map>
 #include <queue>
 
 using namespace std;
 
-void findMinimalSet(set<int> *C){
-    auto y = C->begin();
+unordered_map<int, bool> removeMultiples(set<int> *C){ // does it really work?
+    int max = *C->rbegin();
     unordered_map<int, bool> ht;
     for(auto x : *C){
         ht[x] = true;
     }
+    for(auto x : *C){
+        for (int i = x*2; i <= max; i += x){
+            if(ht[i])
+                C->erase(i);
+            ht[i] = true;
+        }
+    }
+    return ht;
+}
+
+void findAperry(set<int> *C){
+    int m = *(C->begin());
+    vector<int> ap(m);
+    for(auto x : *C){
+        int t = x%m;
+        if(!ap[t])
+            ap[t] = x;
+    }
+    set<int> C_new;
+    for (auto x : ap)
+        C_new.insert(x);
+    *C = set<int>(C_new);
+}
+
+void findMinimalSet(set<int> *C){
+    auto y = C->begin();
+    unordered_map<int, bool> ht = removeMultiples(C);
     auto x = C->end();
     x--;
     while(x != y){
@@ -54,7 +82,6 @@ void findMinimalSet(set<int> *C){
         if(flag){
             auto r = x;
             r++;
-            cout << "Removido: " << *r << endl;
             C->erase(r);
         }
     }
@@ -62,12 +89,23 @@ void findMinimalSet(set<int> *C){
 
 int main(void) {
     set<int> C;
-    for (int i = 0; i < 100; i++){
+    int qtd;
+    cin >> qtd;
+    for (int i = 0; i < qtd; i++){
         int x;
         cin >> x;
         C.insert(x);
     }
+    cout << "Tamanho inicio: " << C.size() << endl;
+    cout << "Multiplicidade: " << *C.begin() << endl;
+    findAperry(&C);
+    cout << "Tamanho após obter aperry: " << C.size() << endl;
+    if(*C.begin() == 0){
+        cout << "Caso de teste ruim" << endl;
+        return 0;
+    }
     findMinimalSet(&C);
+    cout << "Tamanho minimal: " << C.size() << endl;
     for(auto x : C)
         cout << x << " ";
     cout << endl;
