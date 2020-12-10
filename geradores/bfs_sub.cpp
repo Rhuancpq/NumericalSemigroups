@@ -11,11 +11,10 @@ using namespace std;
 unordered_map<int, bool> removeMultiples(set<int> *C){ // does it really work?
     int max = *C->rbegin();
     unordered_map<int, bool> ht;
-    for(auto x : *C){
+    for(auto x : *C)
         ht[x] = true;
-    }
     for(auto x : *C){
-        for (int i = x*2; i <= max; i += x){
+        for (int i = x*2; i <= max; i += x){ // otimizar isso e pensar em usar mod no lugar
             if(ht[i])
                 C->erase(i);
             ht[i] = true;
@@ -38,19 +37,19 @@ void findAperry(set<int> *C){
     *C = set<int>(C_new);
 }
 
-void findMinimalSet(set<int> *C){
+void findMinimalSet(set<int> *C) {
     auto y = C->begin();
     unordered_map<int, bool> ht = removeMultiples(C);
     auto x = C->end();
     x--;
-    while(x != y){
-        priority_queue<int> q;
+    while(x != y) {
+        set<int, greater<int>> q;
         unordered_map<int, bool> pre;
         bool flag = false;
-        q.push(*x);
+        q.insert(*x);
         while(!flag and !q.empty()){
-            int v = q.top();
-            q.pop();
+            int v = *q.begin();
+            q.erase(q.begin());
             if(pre[v])
                 continue;
             pre[v] = true;
@@ -67,11 +66,11 @@ void findMinimalSet(set<int> *C){
                 }
                 if(ht[t]){
                     flag = true;
-                    break;
+                    continue;
                 }
-
+                
                 if(!pre[t])
-                    q.push(t);
+                    q.insert(t);
             }
             
             if(flag){
