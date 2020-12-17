@@ -16,10 +16,8 @@ void findAperry(set<int> *C){
         if(!ap[t])
             ap[t] = x;
     }
-    set<int> C_new;
-    for (auto x : ap)
-        C_new.insert(x);
-    *C = set<int>(C_new);
+    *C = set<int>(ap.begin(), ap.end());
+    C->erase(0);
 }
 
 void findMinimalSet(set<int> *C){

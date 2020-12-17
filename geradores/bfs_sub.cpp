@@ -8,13 +8,13 @@
 
 using namespace std;
 
-unordered_map<int, bool> removeMultiples(set<int> *C){ // does it really work?
+unordered_map<int, bool> removeMultiples(set<int> *C){ 
     int max = *C->rbegin();
     unordered_map<int, bool> ht;
     for(auto x : *C)
         ht[x] = true;
     for(auto x : *C){
-        for (int i = x*2; i <= max; i += x){ // otimizar isso e pensar em usar mod no lugar
+        for (int i = x*2; i <= max; i += x){ 
             if(ht[i])
                 C->erase(i);
             ht[i] = true;
@@ -31,10 +31,8 @@ void findAperry(set<int> *C){
         if(!ap[t])
             ap[t] = x;
     }
-    set<int> C_new;
-    for (auto x : ap)
-        C_new.insert(x);
-    *C = set<int>(C_new);
+    *C = set<int>(ap.begin(), ap.end());
+    C->erase(0);
 }
 
 void findMinimalSet(set<int> *C) {
