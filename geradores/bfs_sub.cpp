@@ -44,6 +44,7 @@ void findMinimalSet(set<int> *C) {
         set<int, greater<int>> q;
         unordered_map<int, bool> pre;
         bool flag = false;
+        bool flag2 = false;
         q.insert(*x);
         while(!flag and !q.empty()){
             int v = *q.begin();
@@ -55,8 +56,11 @@ void findMinimalSet(set<int> *C) {
             for(auto i = C->begin(); *i < *x ; i++){
                 int t = v-*i;
 
-                if(t < 0)
+                if(t < 0){
+                    if(i == C->begin())
+                        flag2 = true;
                     break;
+                }
 
                 if(t == 0){
                     flag = true;
@@ -71,7 +75,7 @@ void findMinimalSet(set<int> *C) {
                     q.insert(t);
             }
             
-            if(flag){
+            if(flag || flag2){
                 break;
             }
         }
