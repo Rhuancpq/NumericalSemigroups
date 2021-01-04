@@ -26,10 +26,15 @@ unordered_map<int, bool> removeMultiples(set<int> *C){
 void findAperry(set<int> *C){
     int m = *(C->begin());
     vector<int> ap(m);
+    int count = 0;
     for(auto x : *C){
         int t = x%m;
-        if(!ap[t])
+        if(!ap[t]){
             ap[t] = x;
+            count++;
+        }
+        if(count == m)
+            break;
     }
     *C = set<int>(ap.begin(), ap.end());
     C->erase(0);
