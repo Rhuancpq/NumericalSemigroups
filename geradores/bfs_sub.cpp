@@ -40,6 +40,34 @@ void findAperry(set<int> *C){
     C->erase(0);
 }
 
+bool testMinimality(set<int> *C, int x, unordered_map<int, bool>* ht){
+    set<int, greater<int>> q;
+    unordered_map<int, bool> pre;
+    q.insert(x);
+    while(!q.empty()){
+        int v = *q.begin();
+        q.erase(q.begin());
+        if(pre[v])
+            continue;
+        pre[v] = true;
+        
+        for(auto i = C->begin(); *i < x ; i++){
+            int t = v-*i;
+
+            if(t < *C->begin())
+                break;
+            
+            if((*ht)[t] or t == 0){
+                return false;
+            }
+            
+            if(!pre[t])
+                q.insert(t);
+        }
+    }
+    return true;
+}
+
 void findMinimalSet(set<int> *C) {
     auto y = C->begin();
     unordered_map<int, bool> ht = removeMultiples(C);
@@ -48,39 +76,12 @@ void findMinimalSet(set<int> *C) {
     while(x != y) {
         set<int, greater<int>> q;
         unordered_map<int, bool> pre;
-        bool flag = false;
         q.insert(*x);
-        while(!flag and !q.empty()){
-            int v = *q.begin();
-            q.erase(q.begin());
-            if(pre[v])
-                continue;
-            pre[v] = true;
-            
-            for(auto i = C->begin(); *i < *x ; i++){
-                int t = v-*i;
-
-                if(t < *C->begin())
-                    break;
-                
-                if(ht[t] or t == 0){
-                    flag = true;
-                    continue;
-                }
-                
-                if(!pre[t])
-                    q.insert(t);
-            }
-            
-            if(flag){
-                break;
-            }
-        }
+        bool res = testMinimality(C, *x, &ht);
         x--;
-        if(flag){
+        if(!res){
             auto r = x;
-            r++;
-            C->erase(r);
+            C->erase(++r);
         }
     }
 }
