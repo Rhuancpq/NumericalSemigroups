@@ -39,7 +39,40 @@ FindApery := function(set)
 end;
 
 TestMinimality := function(set, x, ht)
+    local q, pre, v, t, i, m;
+    q := Set([]);
+    pre := NewDictionary(Int, true, BooleanFamily);
+    m := set[1];
+    AddSet(q, x);
+    while Length(q) <> 0 do
+        v := q[Length(q)];
+        RemoveSet(q, v);
+        if KnowsDictionary(pre, v) then
+            continue;
+        fi;
+        AddDictionary(pre, v, true);
 
+        for i in set do
+            if i >= v then
+                break;
+            fi;
+
+            t := v-i;
+
+            if t < m then
+                break;
+            fi;
+
+            if KnowsDictionary(ht, t) then
+                return false;
+            fi;
+
+            if not KnowsDictionary(pre, t) then
+                AddSet(q, t);
+            fi;
+        od;
+    od;
+    return true;
 end;
 
 FindMinimalSet := function(set)

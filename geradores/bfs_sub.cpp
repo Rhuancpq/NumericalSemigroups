@@ -51,13 +51,13 @@ bool testMinimality(set<int> *C, int x, unordered_map<int, bool>* ht){
             continue;
         pre[v] = true;
         
-        for(auto i = C->begin(); *i < x ; i++){
+        for(auto i = C->begin(); *i < v; i++){
             int t = v-*i;
 
             if(t < *C->begin())
                 break;
             
-            if((*ht)[t] or t == 0){
+            if((*ht)[t]){
                 return false;
             }
             
