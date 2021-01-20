@@ -74,9 +74,6 @@ void findMinimalSet(set<int> *C) {
     auto x = C->end();
     x--;
     while(x != y) {
-        set<int, greater<int>> q;
-        unordered_map<int, bool> pre;
-        q.insert(*x);
         bool res = testMinimality(C, *x, &ht);
         x--;
         if(!res){

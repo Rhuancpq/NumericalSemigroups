@@ -43,5 +43,14 @@ TestMinimality := function(set, x, ht)
 end;
 
 FindMinimalSet := function(set)
-    
+    local ht, l, i, x, res;
+    ht := RemoveMultiples(set);
+    l := Length(set);
+    for i in [l, (l-1)..1] do
+        x := set[i];
+        res := TestMinimality(set, x, ht);
+        if not res then
+            RemoveSet(set, x);
+        fi;
+    od;
 end;
