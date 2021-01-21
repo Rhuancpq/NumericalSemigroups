@@ -16,7 +16,7 @@ RemoveMultiples := function(set)
         od;
     od;
     return ht;
-    end;
+end;
 
 FindApery := function(set)
     local m, count, ap, ht, x, t;
