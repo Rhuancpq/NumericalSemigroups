@@ -20,14 +20,14 @@ SumSet := function(A)
     od;
 end;
 
-SumSetNary := function(set, n)
+SumSetNary := function(set, n) #to use memoization later
     if n = 1 then
         return set;
-    fi;        
+    fi;
 
     if n mod 2 = 0 then
         return SumSet(SumSetNary(set, n/2));
     else
-        return SumTwoSet(SumSetNary(set, n-1), set);
+        return SumTwoSet(SumSet(SumSetNary(set, (n-1)/2)), set);
     fi;
 end;
