@@ -1,27 +1,5 @@
-SumTwoSet := function(A, B)
-    local res, a, b;    
-    res := Set([]);
-
-    for a in A do
-        for b in B do
-            AddSet(res, a+b);
-        od;
-    od;
-
-    return res;
-end;
-
-SumSet := function(A)
-    local res, len, i, j;
-    res := Set([]);
-    len := Length(A);
-    for i in [1..len] do
-        for j in [i..len] do
-            AddSet(res, A[i]+A[j]);
-        od;
-    od;
-
-    return res;
+CountSumSet := function(A, B)
+    ## use fft
 end;
 
 SumSetNary := function(set, n, mem) 
@@ -36,7 +14,7 @@ SumSetNary := function(set, n, mem)
     if n mod 2 = 0 then
         t := n/2;
     else
-        t := (n-1)/2;
+        t := n-1;
     fi;
 
     if KnowsDictionary(mem, t) then
@@ -47,9 +25,9 @@ SumSetNary := function(set, n, mem)
     fi;
 
     if n mod 2 = 0 then
-        return SumSet(res);
+        return CountSumSet(res, res);
     else
-        return SumTwoSet(SumSet(res), set);
+        return CountSumSet(res, set);
     fi;
 end;
 
