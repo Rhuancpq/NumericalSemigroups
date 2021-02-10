@@ -59,6 +59,20 @@ MulSetCardinality := function(set, n, mem)
 end;
 
 BuchweitzTest := function(set, min, max)
+    # Set need to be a Gap set of numericalsgps
+    local g, nhs, n, res, mem;
+    mem := NewDictionary(Int, true, List);
+    g := Length(set);
+    res := EmptyPlist(max-min+1);
+    for n in [min..max] do
+        nhs := MulSetCardinality(set, n, mem);
 
+        if nhs > (2*n-1) * (g - 1) then
+            Add(res, true);
+        else
+            Add(res, false);
+        fi;
+    od;
 
+    return res;
 end;
