@@ -1,3 +1,5 @@
+LoadPackage("Numericalsgps");;
+
 SumTwoSet := function(A, B)
     local res, a, b;    
     res := Set([]);
@@ -54,8 +56,11 @@ SumSetNary := function(set, n, mem)
 end;
 
 BuchweitzTest := function(set, min, max)
-    # Set need to be a Gap set of numericalsgps
     local g, nhs, n, res, mem;
+    if not RepresentsGapsOfNumericalSemigroup(set) then
+        Error("Set must be a gapset of a numericalsgps");
+        return -1;
+    fi;
     mem := NewDictionary(Int, true, Set);
     g := Length(set);
     res := EmptyPlist(max-min+1);
