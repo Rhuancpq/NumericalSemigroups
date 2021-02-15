@@ -4,26 +4,32 @@ PowerCoeffs := function(pol, n, mem)
     # mem should be a dict
     # Example of mem
     # mem := NewDictionary(Int, true, List);
-    local i, vec;
+    local i, res, x, y;
 
-    vec := EmptyPlist(n);
-    Add(vec, pol);
-    AddDictionary(mem, 1, pol);
+    i := n;
+    x := pol;
+    y := [1];
 
-    for i in [2..n] do
-        if KnowsDictionary(mem, i) then
-            Add(vec, LookupDictionary(mem, i));
+    if KnowsDictionary(mem, n) then
+        return LookupDictionary(mem, n);        
+    fi;
+
+    while(i > 1) do
+        if i mod 2 = 0 then
+            x := ProductCoeffs(x, x);
+            i := i/2;
         else
-            if n mod 2 = 0 then
-                Add(vec, ProductCoeffs(vec[n/2], vec[n/2]));
-            else
-                Add(vec, ProductCoeffs(vec[n-1], vec[1]));
-            fi;
-            AddDictionary(mem, i, vec[i]);
+            y := ProductCoeffs(x, y);
+            x := ProductCoeffs(x, x);
+            i := (i-1)/2;
         fi;
+            
     od;
 
-    return vec[n];
+    res := ProductCoeffs(x, y);
+    AddDictionary(mem, n, res);
+    
+    return res;
 end;
 
 GetPolyCoeffs := function(set)
