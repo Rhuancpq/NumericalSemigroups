@@ -20,18 +20,30 @@ BuchweitzFirstOfTest := function(set, max)
 end;
 
 SNTestsByGenus := function(ming, maxg, maxn)
-    local g, x, sns, gaps, res;
+    local g, x, sns, gaps, res, vec, fn;
     for g in [ming..maxg] do
         sns := NumericalSemigroupsWithGenus(g);
         gaps := List(sns, x -> GapsOfNumericalSemigroup(x));
         Print("SN by genus ", g, ":\n\n");
+        vec := [];
         for x in gaps do
             res := BuchweitzFirstOfTest(x, maxn);
             if res[1] then
-                Print("gapset: ", x);
-                Print(" n: ", res[2], "\n");
+                Add(vec, [x, res[2]]);
             fi;
         od;
+
+        if Length(vec) > 0 then
+            fn := function(a, b)
+                return a[2] < b[2];
+            end;
+
+            StableSort(vec, fn);
+
+            for x in vec do
+                Print("gapset: ", x[1], " n: ", x[2], "\n");
+            od;
+        fi;
         Print("\n");
     od;
 
