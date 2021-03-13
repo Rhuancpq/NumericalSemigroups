@@ -1,16 +1,26 @@
 Read("PolyProductIter.g");
 
 BuchweitzFirstOfTest := function(set, max)
-    local g, nhs, n, res, mem, lg;
+    local g, nhs, n, res, mem, lg, up;
     if not RepresentsGapsOfNumericalSemigroup(set) then
         Error("Set must be a gapset of a numericalsgps");
         return -1;
     fi;
     mem := NewDictionary(Int, true, List);
     g := Length(set);
-    for n in [2..max] do
+    lg := set[g];
+    if(lg = 2*g - 1) then
+        return [false];
+    else
+        if(g <= 2) then
+            up := 2;
+        else
+            up := g-1;
+        fi;
+        up := Minimum(up, max);
+    fi;
+    for n in [2..up] do
         # Gilvan theorem
-        lg := set[g];
         if(lg >= 2*g-1-Int(g/n)) then
             nhs := MulSetCardinality(set, n, mem);
 
@@ -26,7 +36,7 @@ BuchweitzFirstOfTest := function(set, max)
 end;
 
 BuchweitzPassTestMultipleTimes := function(set, max)
-    local g, nhs, n, res, mem, lg;
+    local g, nhs, n, res, mem, lg, up;
     if not RepresentsGapsOfNumericalSemigroup(set) then
         Error("Set must be a gapset of a numericalsgps");
         return -1;
@@ -34,7 +44,18 @@ BuchweitzPassTestMultipleTimes := function(set, max)
     mem := NewDictionary(Int, true, List);
     res := [];
     g := Length(set);
-    for n in [2..max] do
+    lg := set[g];
+    if(lg = 2*g - 1) then
+        return [false];
+    else
+        if(g <= 2) then
+            up := 2;
+        else
+            up := g-1;
+        fi;
+        up := Minimum(up, max);
+    fi;
+    for n in [2..up] do
         # Gilvan theorem
         lg := set[g];
         if(lg >= 2*g-1-Int(g/n)) then
@@ -79,7 +100,7 @@ SNTestsByGenus := function(ming, maxg, maxn)
 
 end;
 
-SNTestsTwiceByGenus := function(ming, maxg, maxn)
+SNMultipleTestsByGenus := function(ming, maxg, maxn)
     local g, x, y, sns, gaps, res, vec, fn;
     for g in [ming..maxg] do
         sns := NumericalSemigroupsWithGenus(g);
