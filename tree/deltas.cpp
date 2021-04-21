@@ -1,68 +1,69 @@
 #include <vector>
 #include <unordered_map>
+#include <map>
+#include <set>
 #include <cstring>
 #include <iostream>
 using namespace std;
 
-int count( const vector<int> *S, int m, int n,
-vector<unordered_map<int,int>>* memo) {
+unordered_map<int, int> compute_delta(set<int> G, set<int> gen){
+    int g = G.size();
+    unordered_map<int, int> delta;
+    for(auto x : G)
+        delta[x] = 0;
+    delta[0] = 1;
+    for(auto x : gen)
+        delta[x] = 1;
 
-    int r;
-    if((*memo)[m][n] == 0){
-        int table[n+1];
-        memset(table, 0, sizeof(table)); 
+    for (int i = 1; i <= 3*g; i++){
+        if(G.count(i) == 1 || gen.count(i) == 1){
+            continue;
+        }
 
-        table[0] = 1; 
+        for (int j = 1; j <= i/2; j++){
+            if(delta[j])
+                delta[i]++;
+        }
 
-        for(int i=0; i<m; i++) 
-            for(int j=(*S)[i]; j<=n; j++) 
-                table[j] += table[j] > 2 ? 0 : table[j-(*S)[i]];
-        
-        r = table[n];
-        (*memo)[m][n] = r;
-    }else
-        r = (*memo)[m][n];
-
-    return r; 
+        if(delta[i] != 0){
+            delta[i]++;
+        }
+    }
+    
+    return delta;
 }
 
 int main(){
-    vector<vector<vector<int>>> a = {
-        {{ 1 }},
-        {{ 2, 3 }},
-        {{ 3, 4, 5 },
-        { 2, 5 }},
-        {{ 4, 5, 6, 7 },
-        { 3, 5, 7 },
-        { 3, 4 },
-        { 2, 7 }},
-        {{ 5, 6, 7, 8, 9 },
-        { 4, 6, 7, 9 },
-        { 4, 5, 7 },
-        { 4, 5, 6 },
-        { 3, 5 },
-        { 3, 7, 8 },
-        { 2, 9}}
-    };
-    for(int i = 0; i < a.size(); i++){
-        cout << "Gen: " << i << endl;
-        for(auto y : a[i]){
-            cout << "Min gen: ";
-            for(auto z : y){
-                cout << z;
-                if(*y.rbegin() == z)
-                    cout << endl;
-                else
-                    cout << " ";
-            }
-            vector<unordered_map<int,int>> memo(y.size()+1);
-            count(&y, y.size(), 10*i, &memo);
-            for (int j = 0; j <= 10*i; j++){
-                cout << "ds(" << j << ") = "
-                << count(&y, y.size(), j, &memo) << endl;
-            }
-            cout << endl;
-        }
+    set<int> G = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14,
+        15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31,
+        32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46,
+        47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60,
+        61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75,
+        76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89,
+        90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 104,
+        105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115,
+        116, 117, 118, 119, 121, 122, 123, 124, 125, 126, 127, 128,
+        129, 130, 132, 133, 136, 137, 139, 140, 141, 142, 143,
+        144, 145, 146, 147, 148, 149, 151, 152, 153, 154, 156, 157,
+        158, 159, 160, 161, 163, 164, 165, 167, 168, 169, 170,
+        171, 172, 173, 174, 175, 176, 177, 178, 179, 180, 181, 182,
+        183, 184, 185, 186, 187, 188, 189, 190, 191, 192, 193,
+        194, 195, 196, 197, 199, 200, 201, 202, 203, 204, 205, 207,
+        208, 209, 210, 211, 212, 213, 214, 215, 216, 217, 218,
+        219, 221, 222, 224, 225, 226, 227, 228, 229, 230, 231, 232,
+        235, 236, 242, 243, 244, 246, 247, 249, 250, 252, 256,
+        257, 259, 260, 261, 263, 264, 267, 271, 277, 278, 279, 280,
+        283, 287, 292, 294, 295, 298, 302, 303, 306, 307, 308,
+        311, 314, 319, 320, 325, 327, 330, 331, 335, 338, 346, 347,
+        349, 350, 352, 362, 363, 366, 381};
+    set<int> gen = {103, 120, 131, 134, 135, 138, 150, 155, 162, 166, 198, 220,
+        233, 239, 245, 248, 274, 291, 299, 313, 315, 322, 334, 339, 345};
+
+    unordered_map<int, int> delta = compute_delta(G, gen);
+    map<int, int> res(delta.begin(), delta.end());
+    for(auto x: res){
+        cout << "X: " << x.first
+        << " d(X): " << x.second << endl;
     }
     return 0;
 }
