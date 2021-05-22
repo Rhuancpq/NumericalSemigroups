@@ -21,7 +21,7 @@ unordered_map<int, int> compute_delta(set<int> G, set<int> gen){
         }
 
         for (int j = 1; j <= i/2; j++){
-            if(delta[j])
+            if(delta[j] and delta[i-j])
                 delta[i]++;
         }
 
@@ -34,8 +34,8 @@ unordered_map<int, int> compute_delta(set<int> G, set<int> gen){
 }
 
 int main(){
-    set<int> G = { 1, 2, 3, 4};
-    set<int> gen = {5, 6, 7, 8, 9};
+    set<int> G = { 1, 3, 5};
+    set<int> gen = {2, 7};
 
     unordered_map<int, int> delta = compute_delta(G, gen);
     map<int, int> res(delta.begin(), delta.end());
