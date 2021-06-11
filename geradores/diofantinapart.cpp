@@ -1,14 +1,10 @@
 #include <math.h>
 #include <vector>
 #include <iostream>
+#include <iterator>
 #include <stack>
 
 using namespace std;
-
-typedef struct eq{
-    int a, b;
-}eq;
-
 
 int gcd(int a, int b, int& x, int& y) {
     if (b == 0) {
@@ -37,6 +33,8 @@ bool find_any_solution(int a, int b, int c, int &x0, int &y0, int &g) {
 }
 
 vector<int> solution_n(vector<int> v, int c){
+    // this version won't work with all cases, only ones when all 
+    // neighbor pairs are co-primes 
     if(v.size() == 2){
         int x0, y0, g;
         vector<int> sol;
@@ -56,6 +54,38 @@ vector<int> solution_n(vector<int> v, int c){
     return sol;
 }
 
+vector<int> solution_part(int d, vector<int> v, int c, int &dn, int &k){
+    int x0, y0, g;
+    g = gcd(d, *v.begin(), x0, y0);
+    vector<int> res;
+    if(v.size() == 1){
+        // base case
+        dn = g;
+        res.push_back(y0*c/dn);
+        k = x0;
+        return res;
+    }
+    res = solution_part(g, vector<int>(v.begin()+1, v.end()), c, dn, k);
+    res.push_back(y0*k*c/dn);
+    k *= x0;
+    return res;
+}
+
+vector<int> solution_part(vector<int> v, int c){
+    int x0, y0, g, dn, k;
+    g = gcd(*v.begin(), *(v.begin()+1), x0, y0);
+    vector<int> res;
+    if(v.size() == 2){
+        res.push_back(y0*c/g);
+        res.push_back(x0*c/g);
+        return res;
+    }
+    res = solution_part(g, vector<int>(v.begin()+2, v.end()), c, dn, k);
+    res.push_back(y0*k*c/dn);
+    res.push_back(x0*k*c/dn);
+    return res;
+}
+
 int main(){
     int n;
     cin >> n;
@@ -67,15 +97,13 @@ int main(){
     }
     int c;
     cin >> c;
-    vector<int> sol = solution_n(v, c);
+    vector<int> sol = solution_part(v, c);
     int sum = 0;
-    for (auto x : sol){
-        cout << x << " ";
+    for (int i = 0; i < n; i++){
+        cout << sol[n-i-1] << " ";
+        sum += v[i]*sol[n-i-1];
     }
     cout << endl;
-    for (int i = 0; i < n; i++){
-        sum += v[i]*sol[i];
-    }
-    cout << sum << endl;
+    cout << sum << endl; 
     return 0;
 }
