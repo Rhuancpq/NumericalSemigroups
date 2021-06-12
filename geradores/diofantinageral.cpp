@@ -94,6 +94,85 @@ vector<vector<int>> solution_n(vector<int> v, int c){
     return sol;
 }
 
+bool check_divisibility(vector<int> values, int d){
+    for(auto x : values){
+        if(x%d != 0)
+            return false;
+    }
+    return true;
+}
+
+vector<vector<int>> geral_solution(vector<int> v, vector<int> k){
+    int x0, y0, g;
+    vector<vector<int>> sol;
+    vector<int> tempa, tempb;
+    if(v.size() == 2){
+        g = gcd(abs(v.front()), abs(v.back()), x0, y0);
+        if (v.front() < 0) x0 = -x0;
+        if (v.back() < 0) y0 = -y0;
+        if(!check_divisibility(k, g)){
+            // change variables TODO
+            // special case when g don't divide k equation
+            cout << "Equation: ";
+            for(auto ki : k)
+                cout << ki << " ";
+            cout << endl;
+            cout << "Special case, not handled" << endl;
+            exit(0);
+        }
+        for(auto ci : k){
+            tempa.push_back(x0*ci/g);
+            tempb.push_back(y0*ci/g);
+        }
+        tempa.push_back(v.back()/g); // /g
+        tempb.push_back(v.front()*-1/g); // /g 
+        sol.push_back(tempa);
+        sol.push_back(tempb);
+        return sol;
+    }
+    gcd(1, v.back(), x0, y0);
+    if (v.front() < 0) x0 = -x0;
+    if (v.back() < 0) y0 = -y0;
+    for(auto ci : k){
+        tempa.push_back(x0*ci);
+        tempb.push_back(y0*ci);
+    }
+    tempa.push_back(v.back()); // /g
+    tempb.push_back(-1); // /g 
+    vector<vector<int>> res = geral_solution(vector<int>(v.begin(), v.end()-1), tempa);
+    res.push_back(tempb);
+    return res;
+}
+
+vector<vector<int>> geral_solution(vector<int> v, int c){
+    int x0, y0, g;
+    vector<vector<int>> sol;
+    vector<int> tempa, tempb;
+    if(v.size() == 2){
+        g = gcd(abs(v.front()), abs(v.back()), x0, y0);
+        if (v.front() < 0) x0 = -x0;
+        if (v.back() < 0) y0 = -y0;
+        tempa.push_back(x0*c/g);
+        tempb.push_back(y0*c/g);
+        tempa.push_back(v.back()/g); // /g
+        tempb.push_back(v.front()*-1/g); // /g 
+        sol.push_back(tempa);
+        sol.push_back(tempb);
+        return sol;
+    }
+    gcd(1, v.back(), x0, y0);
+    if (v.front() < 0) x0 = -x0;
+    if (v.back() < 0) y0 = -y0;
+    tempa.push_back(x0*c);
+    tempb.push_back(y0*c);
+    tempa.push_back(v.back()); // /g
+    tempb.push_back(-1); // /g 
+    vector<vector<int>> res = geral_solution(vector<int>(v.begin(), v.end()-1), tempa);
+    res.push_back(tempb);
+    return res;
+}
+
+
 int main(){
     int n;
     cin >> n;
@@ -105,7 +184,7 @@ int main(){
     }
     int c;
     cin >> c;
-    vector<vector<int>> sol = solution_n(v, c);
+    vector<vector<int>> sol = geral_solution(v, c);
     cout << sol.size() << endl;
     for (auto x : sol){
         for(auto y : x){
