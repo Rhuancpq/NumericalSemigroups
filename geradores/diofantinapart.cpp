@@ -56,7 +56,9 @@ vector<int> solution_n(vector<int> v, int c){
 
 vector<int> solution_part(int d, vector<int> v, int c, int &dn, int &k){
     int x0, y0, g;
-    g = gcd(d, *v.begin(), x0, y0);
+    g = gcd(abs(d), abs(*v.begin()), x0, y0);
+    if (d < 0) x0 = -x0;
+    if (*v.begin() < 0) y0 = -y0;
     vector<int> res;
     if(v.size() == 1){
         // base case
@@ -73,7 +75,9 @@ vector<int> solution_part(int d, vector<int> v, int c, int &dn, int &k){
 
 vector<int> solution_part(vector<int> v, int c){
     int x0, y0, g, dn, k;
-    g = gcd(*v.begin(), *(v.begin()+1), x0, y0);
+    g = gcd(abs(*v.begin()), abs(*(v.begin()+1)), x0, y0);
+    if (*v.begin() < 0) x0 = -x0;
+    if (*(v.begin()+1) < 0) y0 = -y0;
     vector<int> res;
     if(v.size() == 2){
         res.push_back(y0*c/g);
