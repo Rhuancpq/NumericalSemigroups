@@ -48,7 +48,7 @@ vector<vector<int>> solution_n(vector<int> v, vector<int> c){
     int x0, y0, g;
     vector<vector<int>> sol;
     vector<int> tempa, tempb;
-    find_any_solution(1, v.back(), c.front(), x0, y0, g);
+    find_any_solution(1, v.back(), c.front(), x0, y0, g); // k_m*x + v[n]*y = c[0] 
     for(auto ci : c){
         tempa.push_back(x0*ci/g);
         tempb.push_back(y0*ci/g);
@@ -67,11 +67,25 @@ vector<vector<int>> solution_n(vector<int> v, int c){
     int x0, y0, g;
     vector<vector<int>> sol;
     vector<int> tempa, tempb;
-    find_any_solution(1, v.back(), c, x0, y0, g);
+    if(v.size() == 2){
+        g = gcd(v.front(), v.back(), x0, y0);
+        if (v.front() < 0) x0 = -x0;
+        if (v.back() < 0) y0 = -y0;
+        tempa.push_back(x0*c/g);
+        tempb.push_back(y0*c/g);
+        tempa.push_back(v.back()/g); // /g
+        tempb.push_back(v.front()*-1/g); // /g 
+        sol.push_back(tempa);
+        sol.push_back(tempb);
+        return sol;
+    }
+    find_any_solution(1, v.back(), c, x0, y0, g); // k_1*x + v_n*y = c 
     tempa.push_back(x0*c/g);
     tempa.push_back(v.back()/g); 
     tempb.push_back(y0*(c/g));
     tempb.push_back(-1);
+    // tempa: k_1
+    // v1 + v2 + ... + v_n = k_1
     vector<vector<int>> vnew = solution_n(vector<int>(v.begin(), v.end()-1), tempa);
     for (auto i : vnew){
         sol.push_back(i);
