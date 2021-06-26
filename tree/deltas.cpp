@@ -34,14 +34,37 @@ unordered_map<int, int> compute_delta(set<int> G, set<int> gen){
 }
 
 int main(){
-    set<int> G = { 1, 3, 5};
-    set<int> gen = {2, 7};
+    int g, e;
+    // Uses delta_in input format
+    while(cin >> g) {
+        set<int> G;
+        set<int> gen;
+        cin >> e;
+        for (int i = 0; i < g; i++){
+            int x;
+            cin >> x;
+            G.insert(x);
+        }
+        for (int i = 0; i < e; i++){
+            int x;
+            cin >> x;
+            gen.insert(x);
+        }
 
-    unordered_map<int, int> delta = compute_delta(G, gen);
-    map<int, int> res(delta.begin(), delta.end());
-    for(auto x: res){
-        cout << "X: " << x.first
-        << " | d(X): " << x.second << endl;
+        cout << "<";
+        for(auto x : gen){
+            cout << x << (x == *gen.rbegin() ? ">" : ",");
+        }
+        cout << endl;
+
+
+        unordered_map<int, int> delta = compute_delta(G, gen);
+        map<int, int> res(delta.begin(), delta.end());
+        for(auto x: res){
+            cout << "X: " << x.first
+            << " | d(X): " << x.second << endl;
+        }
+        cout << endl;
     }
     return 0;
 }
